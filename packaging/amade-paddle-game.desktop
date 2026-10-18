@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=amadeOS Paddle
+Name[de]=amadeOS Paddle
+Name[fr]=amadeOS Paddle
+Name[es]=amadeOS Paddle
+Name[it]=amadeOS Paddle
+GenericName=Ball Game
+GenericName[de]=Ballspiel
+GenericName[fr]=Jeu de balle
+GenericName[es]=Juego de pelota
+GenericName[it]=Gioco di palla
+Comment=The classic ball game for two paddles, against the computer or a friend
+Comment[de]=Das klassische Ballspiel für zwei Schläger, gegen den Computer oder zu zweit
+Comment[fr]=Le jeu de balle classique pour deux raquettes, contre l'ordinateur ou à deux
+Comment[es]=El clásico juego de pelota para dos palas, contra el ordenador o entre dos
+Comment[it]=Il classico gioco di palla per due racchette, contro il computer o in due
+Icon=amade-paddle-game
+Exec=/usr/bin/amade-paddle-game
+Terminal=false
+Categories=Game;ArcadeGame;
+Keywords=pong;paddle;ball;arcade;two players;game;
+StartupNotify=true

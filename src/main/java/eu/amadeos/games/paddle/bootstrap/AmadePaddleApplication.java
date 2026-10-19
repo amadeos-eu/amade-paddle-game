@@ -6,9 +6,6 @@ import eu.amadeos.games.paddle.ui.game.PaddleGame;
 import eu.amadeos.games.paddle.ui.main.PaddlePresenter;
 import eu.amadeos.games.paddle.ui.main.PaddleWindow;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 public final class AmadePaddleApplication {
     public static final AppInfo APP = new AppInfo("amade-paddle-game", "Paddle", "paddle");
 
@@ -29,12 +26,10 @@ public final class AmadePaddleApplication {
             PaddleGame game = injector.getInstance(PaddleGame.class);
             window.bind(presenter);
             presenter.start();
-            window.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    game.stop();
-                    System.exit(0);
-                }
+            // Not a windowClosed listener: switching to full screen closes and reopens the window.
+            window.whenClosed(() -> {
+                game.stop();
+                System.exit(0);
             });
             window.setLocationByPlatform(true);
             window.setVisible(true);

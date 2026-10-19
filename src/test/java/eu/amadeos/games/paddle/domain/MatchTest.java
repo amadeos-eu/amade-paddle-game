@@ -2,6 +2,8 @@ package eu.amadeos.games.paddle.domain;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SplittableRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,8 +83,13 @@ class MatchTest {
         Match match = match();
         match.placePaddle(Side.LEFT, 0);
         match.placeBall(30, 300, -600, 0);
-        for (int i = 0; i < 20; i++) match.update(STEP, 0, 0);
+        boolean point = false;
+        for (int i = 0; i < 20; i++) {
+            match.update(STEP, 0, 0);
+            point |= match.events().contains(Match.Event.POINT);
+        }
         assertEquals(1, match.score(Side.RIGHT));
+        assertTrue(point, "reported as a point");
         assertTrue(match.serving(), "and the next serve waits");
     }
 
@@ -98,6 +105,33 @@ class MatchTest {
         match.update(STEP, 0, 0);
         assertEquals(x, match.ball().x(), "nothing moves any more");
     }
+
+    // --8<-- [start:test-events]
+    @Test
+    void eachStepReportsWhatHappened() {
+        Match match = match();
+        match.placePaddle(Side.RIGHT, 10);
+        match.placeBall(Court.WIDTH - 80, 5, 600, -600);      // off the top wall, then onto the right paddle
+        List<Match.Event> heard = new ArrayList<>();
+        for (int i = 0; i < 60 && match.hits() == 0; i++) {
+            match.update(STEP, 0, 0);
+            heard.addAll(match.events());
+        }
+        assertEquals(List.of(Match.Event.WALL, Match.Event.PADDLE), heard);
+        match.update(STEP, 0, 0);
+        assertEquals(List.of(), match.events(), "a quiet step reports nothing");
+
+        match.setScore(3, 10);
+        match.placePaddle(Side.LEFT, 0);
+        match.placeBall(30, 300, -600, 0);
+        heard.clear();
+        for (int i = 0; i < 20; i++) {
+            match.update(STEP, 0, 0);
+            heard.addAll(match.events());
+        }
+        assertEquals(List.of(Match.Event.WON), heard, "the winning point is the win");
+    }
+    // --8<-- [end:test-events]
 
     @Test
     void paddlesStayInTheCourt() {

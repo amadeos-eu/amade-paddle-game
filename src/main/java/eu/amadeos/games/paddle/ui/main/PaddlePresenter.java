@@ -28,6 +28,7 @@ public final class PaddlePresenter {
     private final HighScores scores;
     private final Supplier<Instant> now;
     private Difficulty difficulty;
+    private boolean sound;
 
     @Inject
     public PaddlePresenter(PaddleView view, Arena arena, Messages msg, PaddleSettings settings, HighScores scores) {
@@ -46,8 +47,10 @@ public final class PaddlePresenter {
 
     public void start() {
         difficulty = settings.difficulty();
-        view.showOptions(difficulty);
+        sound = settings.sound();
+        view.showOptions(difficulty, sound);
         arena.setDifficulty(difficulty);
+        arena.setSound(sound);
         arena.onMatchOver(this::matchOver);
         arena.showTitle();
     }
@@ -59,8 +62,14 @@ public final class PaddlePresenter {
     public void setDifficulty(Difficulty d) {
         difficulty = d;
         settings.setDifficulty(d);
-        view.showOptions(d);
+        view.showOptions(d, sound);
         arena.setDifficulty(d);
+    }
+
+    public void setSound(boolean on) {
+        sound = on;
+        settings.setSound(on);
+        arena.setSound(on);
     }
 
     public void pause() {

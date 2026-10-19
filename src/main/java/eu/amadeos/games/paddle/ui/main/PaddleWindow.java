@@ -7,6 +7,7 @@ import eu.amadeos.commons.swing.EdtExecutor;
 import eu.amadeos.gameengine.input.Keyboard;
 import eu.amadeos.gameengine.score.HighScores;
 import eu.amadeos.gameengine.score.PlayerName;
+import eu.amadeos.gameengine.swing.FullScreen;
 import eu.amadeos.gameengine.swing.GameCanvas;
 import eu.amadeos.gameengine.swing.GameMenus;
 import eu.amadeos.gameengine.swing.GameTexts;
@@ -30,7 +31,7 @@ import java.util.Optional;
 
 /**
  * The game window: a menu and the court, a {@link GameCanvas} the game loop draws on. The window can be
- * resized; the court scales with it.
+ * resized or switched to full screen with F11; the court scales with it.
  */
 public final class PaddleWindow extends JFrame implements PaddleView {
     private final Messages msg;
@@ -38,6 +39,7 @@ public final class PaddleWindow extends JFrame implements PaddleView {
     private final HighScores scores;
     private final PlayerName playerName;
     private final GameCanvas canvas;
+    private final FullScreen fullScreen;
     private final Map<Difficulty, JRadioButtonMenuItem> difficultyItems = new EnumMap<>(Difficulty.class);
     private PaddlePresenter presenter;
 
@@ -60,6 +62,7 @@ public final class PaddleWindow extends JFrame implements PaddleView {
         keyboard.attach(canvas);
         // --8<-- [end:canvas]
         getContentPane().add(canvas, BorderLayout.CENTER);
+        fullScreen = new FullScreen(this, canvas);
         setJMenuBar(menuBar());
         addWindowListener(new WindowAdapter() {
             @Override
@@ -84,6 +87,15 @@ public final class PaddleWindow extends JFrame implements PaddleView {
         return canvas;
     }
 
+    public FullScreen fullScreen() {
+        return fullScreen;
+    }
+
+    /** Runs the action when the window closes, but not when it only switches to or from full screen. */
+    public void whenClosed(Runnable action) {
+        fullScreen.whenClosed(action);
+    }
+
     private JMenuBar menuBar() {
         JMenu game = menus.game();
         game.add(item("menu.game.one-player", "game-one-player", KeyEvent.VK_F2, () -> presenter.newGame(Mode.ONE_PLAYER)));
@@ -104,6 +116,7 @@ public final class PaddleWindow extends JFrame implements PaddleView {
         game.addSeparator();
         // No shortcut: P is the game's own pause key.
         game.add(item("menu.game.pause", "game-pause", 0, () -> presenter.pause()));
+        game.add(menus.fullScreen(fullScreen::toggle));
         game.addSeparator();
         game.add(menus.highScores(() -> presenter.showScores()));
         game.addSeparator();

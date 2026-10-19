@@ -27,6 +27,7 @@ import java.util.SplittableRandom;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -113,5 +114,14 @@ class PaddleWindowTest {
         long deadline = System.currentTimeMillis() + 3000;
         while (started.get() == null && System.currentTimeMillis() < deadline) Thread.sleep(20);
         assertTrue("ONE_PLAYER NORMAL".equals(started.get()), "started: " + started.get());
+    }
+
+    @Test
+    void f11SwitchesToFullScreenAndBack() throws Exception {
+        key(KeyEvent.KEY_PRESSED, KeyEvent.VK_F11);
+        onEdt(() -> assertTrue(window.fullScreen().active(), "full screen"));
+        // The menu bar is hidden now; F11 still reaches the menu entry.
+        key(KeyEvent.KEY_PRESSED, KeyEvent.VK_F11);
+        onEdt(() -> assertFalse(window.fullScreen().active(), "back in the window"));
     }
 }

@@ -26,7 +26,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PaddlePresenterTest {
     private static final Instant WON_AT = Instant.parse("2026-10-18T20:00:00Z");
@@ -35,6 +37,7 @@ class PaddlePresenterTest {
     static final class FakeArena implements Arena {
         final List<String> commands = new ArrayList<>();
         Difficulty difficulty;
+        Boolean sound;
         Consumer<MatchResult> listener;
 
         @Override
@@ -53,6 +56,11 @@ class PaddlePresenterTest {
         }
 
         @Override
+        public void setSound(boolean on) {
+            sound = on;
+        }
+
+        @Override
         public void pause() {
             commands.add("pause");
         }
@@ -66,14 +74,16 @@ class PaddlePresenterTest {
     /** Records what the presenter shows and answers its questions from a queue. */
     static final class FakeView implements PaddleView {
         Difficulty difficulty;
+        boolean sound;
         final Deque<Optional<String>> names = new ArrayDeque<>();
         String askedWith;
         Difficulty scoresShown;
         int highlight = -2;
 
         @Override
-        public void showOptions(Difficulty d) {
+        public void showOptions(Difficulty d, boolean soundOn) {
             difficulty = d;
+            sound = soundOn;
         }
 
         @Override
@@ -100,13 +110,15 @@ class PaddlePresenterTest {
     private final FakeView view = new FakeView();
     private PaddleSettings settings;
     private HighScores scores;
+    private PaddlePresenter presenter;
 
     @BeforeEach
     void start() {
         settings = new PaddleSettings(dir.resolve("paddle.properties"));
         scores = new HighScores(dir.resolve("scores"), Ranking.LOWER_WINS);
         Messages msg = Messages.load(PaddleModule.class, PaddleModule.MESSAGES, Locale.ENGLISH);
-        new PaddlePresenter(view, arena, msg, settings, scores, () -> WON_AT).start();
+        presenter = new PaddlePresenter(view, arena, msg, settings, scores, () -> WON_AT);
+        presenter.start();
     }
 
     @Test
@@ -114,6 +126,15 @@ class PaddlePresenterTest {
         assertEquals(List.of("title"), arena.commands);
         assertEquals(Difficulty.NORMAL, view.difficulty);
         assertEquals(Difficulty.NORMAL, arena.difficulty);
+        assertTrue(view.sound, "sound is on at first");
+        assertEquals(true, arena.sound);
+    }
+
+    @Test
+    void soundCanBeSwitchedOffAndStaysOff() {
+        presenter.setSound(false);
+        assertEquals(false, arena.sound);
+        assertFalse(settings.sound());
     }
 
     // --8<-- [start:test-win]

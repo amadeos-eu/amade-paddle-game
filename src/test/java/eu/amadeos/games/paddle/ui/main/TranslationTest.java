@@ -37,7 +37,7 @@ class TranslationTest {
             Messages game = Messages.load(PaddleModule.class, PaddleModule.MESSAGES, language.locale());
             List<String> texts = List.of(game.get("menu.game.one-player"), game.get("menu.game.two-players"),
                     game.get("menu.game.easy"), game.get("menu.game.normal"), game.get("menu.game.hard"),
-                    game.get("menu.game.pause"), engine.get("menu.game.scores"), engine.get("menu.game.exit"));
+                    game.get("menu.game.sound"), game.get("menu.game.pause"), engine.get("menu.game.scores"), engine.get("menu.game.exit"));
             Map<Character, String> seen = new HashMap<>();
             for (String text : texts) {
                 Mnemonics.Text t = Mnemonics.parse(text);

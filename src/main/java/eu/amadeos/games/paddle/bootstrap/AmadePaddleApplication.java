@@ -2,6 +2,7 @@ package eu.amadeos.games.paddle.bootstrap;
 
 import eu.amadeos.commons.app.AmadeApplication;
 import eu.amadeos.commons.app.AppInfo;
+import eu.amadeos.gameengine.audio.Mixer;
 import eu.amadeos.games.paddle.ui.game.PaddleGame;
 import eu.amadeos.games.paddle.ui.main.PaddlePresenter;
 import eu.amadeos.games.paddle.ui.main.PaddleWindow;
@@ -21,6 +22,9 @@ public final class AmadePaddleApplication {
     // --8<-- [start:main]
     public static void main(String[] args) {
         AmadeApplication.launch(APP, injector -> {
+            // The sound card first: the mixer writes (inaudible) sound from now on, so it is ready for the first beep.
+            Mixer mixer = injector.getInstance(Mixer.class);
+            mixer.start();
             PaddleWindow window = injector.getInstance(PaddleWindow.class);
             PaddlePresenter presenter = injector.getInstance(PaddlePresenter.class);
             PaddleGame game = injector.getInstance(PaddleGame.class);
@@ -29,6 +33,7 @@ public final class AmadePaddleApplication {
             // Not a windowClosed listener: switching to full screen closes and reopens the window.
             window.whenClosed(() -> {
                 game.stop();
+                mixer.close();
                 System.exit(0);
             });
             window.setLocationByPlatform(true);

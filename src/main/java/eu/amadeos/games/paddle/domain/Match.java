@@ -1,5 +1,7 @@
 package eu.amadeos.games.paddle.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.random.RandomGenerator;
 
 /**
@@ -8,6 +10,11 @@ import java.util.random.RandomGenerator;
  */
 public final class Match {
     public static final int POINTS_TO_WIN = 11;
+
+    // --8<-- [start:events]
+    /** Something that happened during a step. The match only reports it; what it sounds like is up to the game. */
+    public enum Event { PADDLE, WALL, POINT, WON }
+    // --8<-- [end:events]
 
     private final Paddle left = new Paddle(Side.LEFT);
     private final Paddle right = new Paddle(Side.RIGHT);
@@ -19,6 +26,7 @@ public final class Match {
     private Side serveTo;
     private Side winner;
     private int hits;
+    private final List<Event> events = new ArrayList<>();
 
     public Match(RandomGenerator random) {
         this.random = random;
@@ -48,6 +56,11 @@ public final class Match {
         return serveDelay > 0;
     }
 
+    /** What happened during the last {@link #update}, in order. */
+    public List<Event> events() {
+        return List.copyOf(events);
+    }
+
     /** Paddle hits so far, both sides together. */
     public int hits() {
         return hits;
@@ -61,6 +74,7 @@ public final class Match {
      * @param rightMove the same for the right paddle
      */
     public void update(double seconds, double leftMove, double rightMove) {
+        events.clear();
         left.move(leftMove, seconds);
         right.move(rightMove, seconds);
         if (winner != null) return;
@@ -87,9 +101,11 @@ public final class Match {
         if (ball.y < 0) {
             ball.y = -ball.y;
             ball.vy = -ball.vy;
+            events.add(Event.WALL);
         } else if (ball.y > bottom) {
             ball.y = 2 * bottom - ball.y;
             ball.vy = -ball.vy;
+            events.add(Event.WALL);
         }
     }
 
@@ -123,6 +139,7 @@ public final class Match {
         double past = now - face;
         ball.x -= 2 * past;
         hits++;
+        events.add(Event.PADDLE);
     }
     // --8<-- [end:hit]
 
@@ -131,9 +148,11 @@ public final class Match {
         else rightScore++;
         if (score(scorer) >= POINTS_TO_WIN) {
             winner = scorer;
+            events.add(Event.WON);
             ball.place((Court.WIDTH - Court.BALL_SIZE) / 2, (Court.HEIGHT - Court.BALL_SIZE) / 2, 0, 0);
             return;
         }
+        events.add(Event.POINT);
         // The side that lost the point receives the next serve.
         serveTo = scorer.other();
         prepareServe();

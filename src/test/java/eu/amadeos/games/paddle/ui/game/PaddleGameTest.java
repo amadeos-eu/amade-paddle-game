@@ -1,6 +1,7 @@
 package eu.amadeos.games.paddle.ui.game;
 
 import eu.amadeos.commons.i18n.Messages;
+import eu.amadeos.gameengine.audio.Mixer;
 import eu.amadeos.gameengine.input.Keyboard;
 import eu.amadeos.games.paddle.bootstrap.PaddleModule;
 import eu.amadeos.games.paddle.domain.Court;
@@ -47,7 +48,7 @@ class PaddleGameTest {
     void create() {
         Messages msg = Messages.load(PaddleModule.class, PaddleModule.MESSAGES, Locale.ENGLISH);
         game = new PaddleGame(keyboard, msg, new PaddleSettings(dir.resolve("paddle.properties")),
-                new SplittableRandom(4), Runnable::run);
+                new SplittableRandom(4), new Mixer(), Runnable::run);
         game.onMatchOver(results::add);
     }
 
@@ -153,7 +154,7 @@ class PaddleGameTest {
         java.nio.file.Files.writeString(dir.resolve("paddle.properties"), "keys.right-up=I\n");
         Messages msg = Messages.load(PaddleModule.class, PaddleModule.MESSAGES, Locale.ENGLISH);
         PaddleGame custom = new PaddleGame(keyboard, msg, new PaddleSettings(dir.resolve("paddle.properties")),
-                new SplittableRandom(4), Runnable::run);
+                new SplittableRandom(4), new Mixer(), Runnable::run);
         keyboard.pressed(KeyEvent.VK_I, now[0]);
         keyboard.poll();
         assertTrue(custom.controls().isDown(PaddleGame.Action.RIGHT_UP));

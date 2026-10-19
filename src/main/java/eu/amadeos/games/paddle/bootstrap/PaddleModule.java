@@ -8,6 +8,7 @@ import eu.amadeos.commons.app.AppInfo;
 import eu.amadeos.commons.config.AppDirectories;
 import eu.amadeos.commons.config.XdgDirectories;
 import eu.amadeos.commons.i18n.Messages;
+import eu.amadeos.gameengine.audio.Mixer;
 import eu.amadeos.gameengine.input.Keyboard;
 import eu.amadeos.gameengine.score.HighScores;
 import eu.amadeos.gameengine.score.PlayerName;
@@ -34,6 +35,7 @@ public final class PaddleModule extends AbstractModule {
     protected void configure() {
         bind(PaddleSettings.class).in(Scopes.SINGLETON);
         bind(Keyboard.class).in(Scopes.SINGLETON);
+        bind(Mixer.class).in(Scopes.SINGLETON);
         bind(PaddleGame.class).in(Scopes.SINGLETON);
         bind(Arena.class).to(PaddleGame.class);
         bind(PaddleWindow.class).in(Scopes.SINGLETON);

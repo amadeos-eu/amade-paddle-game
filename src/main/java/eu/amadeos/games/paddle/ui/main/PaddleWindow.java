@@ -41,6 +41,7 @@ public final class PaddleWindow extends JFrame implements PaddleView {
     private final GameCanvas canvas;
     private final FullScreen fullScreen;
     private final Map<Difficulty, JRadioButtonMenuItem> difficultyItems = new EnumMap<>(Difficulty.class);
+    private final JCheckBoxMenuItem sound;
     private PaddlePresenter presenter;
 
     @Inject
@@ -63,6 +64,12 @@ public final class PaddleWindow extends JFrame implements PaddleView {
         // --8<-- [end:canvas]
         getContentPane().add(canvas, BorderLayout.CENTER);
         fullScreen = new FullScreen(this, canvas);
+        sound = Mnemonics.apply(new JCheckBoxMenuItem(), msg.get("menu.game.sound"));
+        sound.setName("game-sound");
+        sound.addActionListener(e -> {
+            presenter.setSound(sound.isSelected());
+            canvas.requestFocusInWindow();
+        });
         setJMenuBar(menuBar());
         addWindowListener(new WindowAdapter() {
             @Override
@@ -114,6 +121,7 @@ public final class PaddleWindow extends JFrame implements PaddleView {
             difficultyItems.put(d, item);
         }
         game.addSeparator();
+        game.add(sound);
         // No shortcut: P is the game's own pause key.
         game.add(item("menu.game.pause", "game-pause", 0, () -> presenter.pause()));
         game.add(menus.fullScreen(fullScreen::toggle));
@@ -143,8 +151,9 @@ public final class PaddleWindow extends JFrame implements PaddleView {
     // ---- PaddleView ------------------------------------------------------------------------------
 
     @Override
-    public void showOptions(Difficulty difficulty) {
+    public void showOptions(Difficulty difficulty, boolean soundOn) {
         difficultyItems.get(difficulty).setSelected(true);
+        sound.setSelected(soundOn);
     }
 
     @Override

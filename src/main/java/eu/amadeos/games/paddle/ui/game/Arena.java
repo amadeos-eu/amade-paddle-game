@@ -20,6 +20,9 @@ public interface Arena {
     /** The difficulty a match started from the title screen gets. */
     void setDifficulty(Difficulty difficulty);
 
+    /** Sound effects on or off. */
+    void setSound(boolean on);
+
     /** Pauses a running match; does nothing elsewhere. */
     void pause();
 

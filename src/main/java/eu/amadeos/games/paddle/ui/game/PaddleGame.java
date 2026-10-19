@@ -3,6 +3,7 @@ package eu.amadeos.games.paddle.ui.game;
 import com.google.inject.Inject;
 import eu.amadeos.commons.i18n.Messages;
 import eu.amadeos.commons.swing.EdtExecutor;
+import eu.amadeos.gameengine.audio.Mixer;
 import eu.amadeos.gameengine.input.Controls;
 import eu.amadeos.gameengine.input.Keyboard;
 import eu.amadeos.gameengine.loop.GameLoop;
@@ -19,13 +20,14 @@ import eu.amadeos.games.paddle.repository.PaddleSettings;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.random.RandomGenerator;
 
 /**
  * The running game: the loop, the controls and the scenes (title with the computer playing itself, the
- * match, the pause screen, the end of a match). Everything here runs on the game loop thread, except the
+ * match, the pause screen, the end of a match) and the sounds. Everything here runs on the game loop thread, except the
  * {@link Arena} methods, which only post commands to it.
  */
 public final class PaddleGame implements Arena {
@@ -41,6 +43,8 @@ public final class PaddleGame implements Arena {
     private final Messages msg;
     private final RandomGenerator random;
     private final Executor ui;
+    private final Mixer mixer;
+    private final SoundBank sounds = new SoundBank();
     private final SceneStack scenes = new SceneStack();
     private volatile Consumer<MatchResult> onMatchOver = result -> { };
     private volatile Difficulty difficulty = Difficulty.NORMAL;
@@ -48,14 +52,16 @@ public final class PaddleGame implements Arena {
 
     @Inject
     public PaddleGame(Keyboard keyboard, Messages msg, PaddleSettings settings, RandomGenerator random,
-                      EdtExecutor ui) {
-        this(keyboard, msg, settings, random, (Executor) ui);
+                      Mixer mixer, EdtExecutor ui) {
+        this(keyboard, msg, settings, random, mixer, (Executor) ui);
     }
 
-    PaddleGame(Keyboard keyboard, Messages msg, PaddleSettings settings, RandomGenerator random, Executor ui) {
+    PaddleGame(Keyboard keyboard, Messages msg, PaddleSettings settings, RandomGenerator random, Mixer mixer,
+               Executor ui) {
         this.keyboard = keyboard;
         this.msg = msg;
         this.random = random;
+        this.mixer = mixer;
         this.ui = ui;
         // --8<-- [start:controls]
         controls = new Controls<>(Action.class, keyboard)
@@ -120,6 +126,11 @@ public final class PaddleGame implements Arena {
     }
 
     @Override
+    public void setSound(boolean on) {
+        mixer.setMuted(!on);
+    }
+
+    @Override
     public void onMatchOver(Consumer<MatchResult> listener) {
         onMatchOver = listener;
     }
@@ -130,6 +141,20 @@ public final class PaddleGame implements Arena {
         else command.run();
     }
     // --8<-- [end:post]
+
+    // --8<-- [start:play]
+    /** Plays what happened in a step of a match. The title screen stays silent: nobody asked for its noise. */
+    private void play(List<Match.Event> events) {
+        for (Match.Event event : events) {
+            mixer.play(switch (event) {
+                case PADDLE -> sounds.paddle;
+                case WALL -> sounds.wall;
+                case POINT -> sounds.point;
+                case WON -> sounds.won;
+            });
+        }
+    }
+    // --8<-- [end:play]
 
     // ---- for tests -------------------------------------------------------------------------------
 
@@ -205,6 +230,7 @@ public final class PaddleGame implements Arena {
                     : computer.move(match, seconds);
             double rightMove = controls.axis(Action.RIGHT_UP, Action.RIGHT_DOWN);
             match.update(seconds, leftMove, rightMove);
+            play(match.events());
             if (match.winner() != null) {
                 MatchResult result = new MatchResult(mode, matchDifficulty, match.winner(),
                         match.score(Side.LEFT), match.score(Side.RIGHT));

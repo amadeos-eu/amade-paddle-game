@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * The computer's difficulty and the keys, in {@code ~/.config/amadeos/paddle/paddle.properties}. Keys are
+ * The computer's difficulty, the sound and the keys, in {@code ~/.config/amadeos/paddle/paddle.properties}. Keys are
  * written as Java names them, several separated by spaces, e.g. {@code keys.left-up=W} or
  * {@code keys.right-up=UP NUMPAD8}.
  */
 public final class PaddleSettings {
     private static final String DIFFICULTY = "difficulty";
+    private static final String SOUND = "sound";
 
     private final Path file;
 
@@ -35,8 +36,21 @@ public final class PaddleSettings {
     }
 
     public void setDifficulty(Difficulty difficulty) {
+        set(DIFFICULTY, difficulty.id());
+    }
+
+    /** Sound effects on, unless switched off. */
+    public boolean sound() {
+        return !"off".equals(PropertiesFile.load(file).getProperty(SOUND, "on"));
+    }
+
+    public void setSound(boolean on) {
+        set(SOUND, on ? "on" : "off");
+    }
+
+    private void set(String key, String value) {
         Properties properties = PropertiesFile.load(file);
-        properties.setProperty(DIFFICULTY, difficulty.id());
+        properties.setProperty(key, value);
         PropertiesFile.store(file, properties, "amade-paddle-game settings");
     }
 

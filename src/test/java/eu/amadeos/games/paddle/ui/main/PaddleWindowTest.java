@@ -1,6 +1,7 @@
 package eu.amadeos.games.paddle.ui.main;
 
 import eu.amadeos.commons.i18n.Messages;
+import eu.amadeos.gameengine.audio.Mixer;
 import eu.amadeos.gameengine.input.Keyboard;
 import eu.amadeos.gameengine.score.HighScores;
 import eu.amadeos.gameengine.score.PlayerName;
@@ -48,7 +49,7 @@ class PaddleWindowTest {
         HighScores scores = new HighScores(dir.resolve("scores"), Ranking.LOWER_WINS);
         Keyboard keyboard = new Keyboard();
         onEdt(() -> {
-            game = new PaddleGame(keyboard, msg, settings, new SplittableRandom(1),
+            game = new PaddleGame(keyboard, msg, settings, new SplittableRandom(1), new Mixer(),
                     new eu.amadeos.commons.swing.EdtExecutor());
             window = new PaddleWindow(msg, scores, new PlayerName(dir, "tester"), game, keyboard);
             // The real game, recording which match the presenter starts.
@@ -67,6 +68,11 @@ class PaddleWindowTest {
                 @Override
                 public void setDifficulty(Difficulty d) {
                     game.setDifficulty(d);
+                }
+
+                @Override
+                public void setSound(boolean on) {
+                    game.setSound(on);
                 }
 
                 @Override

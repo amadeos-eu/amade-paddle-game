@@ -6,8 +6,8 @@ import java.util.Optional;
 
 /** What {@link PaddlePresenter} needs from the window; tests replace it. The court itself is the game's. */
 public interface PaddleView {
-    /** Selects the difficulty in the menu. */
-    void showOptions(Difficulty difficulty);
+    /** Selects the difficulty and ticks the sound in the menu. */
+    void showOptions(Difficulty difficulty, boolean sound);
 
     /** Asks for the player's name after a good result; empty if cancelled. */
     Optional<String> askName(String message);

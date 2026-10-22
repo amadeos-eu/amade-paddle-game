@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata of amade-paddle-game, installed as /usr/share/metainfo/eu.amadeos.games.paddle.metainfo.xml.
+     amadeOS Software shows it for the installed package; a repository's appstream-generator reads it too. -->
+<component type="desktop-application">
+  <id>eu.amadeos.games.paddle</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>EUPL-1.2</project_license>
+
+  <name>amadeOS Paddle</name>
+
+  <summary>The classic ball game for two paddles, against the computer or a friend</summary>
+  <summary xml:lang="de">Das klassische Ballspiel für zwei Schläger, gegen den Computer oder einen Freund</summary>
+  <summary xml:lang="fr">Le jeu de balle classique à deux raquettes, contre l'ordinateur ou un ami</summary>
+  <summary xml:lang="es">El clásico juego de pelota con dos palas, contra el ordenador o un amigo</summary>
+  <summary xml:lang="it">Il classico gioco di palla a due racchette, contro il computer o un amico</summary>
+
+  <description>
+    <p>The first video game in its plainest form: bounce the ball past the other paddle. Play the right paddle against the computer in three difficulties, or two players share one keyboard.</p>
+    <p xml:lang="de">Das erste Videospiel in seiner schlichtesten Form: den Ball am anderen Schläger vorbeispielen. Spielen Sie den rechten Schläger gegen den Computer in drei Schwierigkeitsstufen, oder zwei Spieler teilen sich eine Tastatur.</p>
+    <p xml:lang="fr">Le premier jeu vidéo dans sa forme la plus simple : faire passer la balle derrière l'autre raquette. Jouez la raquette de droite contre l'ordinateur en trois niveaux de difficulté, ou à deux sur un même clavier.</p>
+    <p xml:lang="es">El primer videojuego en su forma más sencilla: pasar la pelota más allá de la otra pala. Juegue con la pala derecha contra el ordenador en tres dificultades, o dos jugadores en un mismo teclado.</p>
+    <p xml:lang="it">Il primo videogioco nella sua forma più semplice: far passare la palla oltre l'altra racchetta. Gioca con la racchetta destra contro il computer in tre difficoltà, o in due sulla stessa tastiera.</p>
+    <ul>
+      <li>One player against the computer: easy, normal or hard</li>
+      <li xml:lang="de">Ein Spieler gegen den Computer: leicht, normal oder schwer</li>
+      <li xml:lang="fr">Un joueur contre l'ordinateur : facile, normal ou difficile</li>
+      <li xml:lang="es">Un jugador contra el ordenador: fácil, normal o difícil</li>
+      <li xml:lang="it">Un giocatore contro il computer: facile, normale o difficile</li>
+      <li>Two players on one keyboard</li>
+      <li xml:lang="de">Zwei Spieler an einer Tastatur</li>
+      <li xml:lang="fr">Deux joueurs sur un clavier</li>
+      <li xml:lang="es">Dos jugadores en un teclado</li>
+      <li xml:lang="it">Due giocatori su una tastiera</li>
+      <li>Ten best results per difficulty</li>
+      <li xml:lang="de">Zehn beste Ergebnisse pro Schwierigkeitsstufe</li>
+      <li xml:lang="fr">Dix meilleurs résultats par difficulté</li>
+      <li xml:lang="es">Diez mejores resultados por dificultad</li>
+      <li xml:lang="it">Dieci migliori risultati per difficoltà</li>
+      <li>Built on amade-game-engine; plays on other operating systems as well</li>
+      <li xml:lang="de">Gebaut auf amade-game-engine; läuft auch auf anderen Betriebssystemen</li>
+      <li xml:lang="fr">Construit sur amade-game-engine ; fonctionne aussi sur d'autres systèmes d'exploitation</li>
+      <li xml:lang="es">Hecho con amade-game-engine; funciona también en otros sistemas operativos</li>
+      <li xml:lang="it">Costruito su amade-game-engine; funziona anche su altri sistemi operativi</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">amade-paddle-game.desktop</launchable>
+  <icon type="stock">amade-paddle-game</icon>
+  <categories>
+    <category>Game</category>
+    <category>ArcadeGame</category>
+  </categories>
+
+  <url type="homepage">https://github.com/datazuul/amade-paddle-game</url>
+  <url type="bugtracker">https://github.com/datazuul/amade-paddle-game/issues</url>
+  <developer id="eu.amadeos">
+    <name>amadeOS Project</name>
+  </developer>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>A game against the computer</caption>
+      <caption xml:lang="de">Ein Spiel gegen den Computer</caption>
+      <caption xml:lang="fr">Une partie contre l'ordinateur</caption>
+      <caption xml:lang="es">Una partida contra el ordenador</caption>
+      <caption xml:lang="it">Una partita contro il computer</caption>
+      <image>https://raw.githubusercontent.com/datazuul/amade-paddle-game/main/docs/screenshots/amade-paddle-game.png</image>
+    </screenshot>
+  </screenshots>
+
+  <provides>
+    <binary>amade-paddle-game</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+</component>

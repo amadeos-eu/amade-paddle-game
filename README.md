@@ -1,6 +1,6 @@
 # amade-paddle-game
 
-**amade-paddle-game** is the classic ball game for two paddles on the [amadeOS](https://github.com/datazuul/amadeos) desktop. Built on [amade-game-engine](https://github.com/datazuul/amade-game-engine); runs on other operating systems as well.
+**amade-paddle-game** is the classic ball game for two paddles on the [amadeOS](https://github.com/amadeos-eu/amadeos) desktop. Built on [amade-game-engine](https://github.com/amadeos-eu/amade-game-engine); runs on other operating systems as well.
 
 ![License](https://img.shields.io/badge/license-EUPL--1.2-blue)
 ![Java](https://img.shields.io/badge/Java-25-orange)

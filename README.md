@@ -58,7 +58,7 @@ A real-time game: the rules are stepped by a game loop, not driven by events.
 
 From the engine: `GameLoop` (fixed steps of 1/120 s, about 60 frames a second), `GameCanvas` (active rendering in logical coordinates, scaled to the window), `Keyboard` and `Controls` (keys mapped to actions, X11 key repeat filtered), `SceneStack`.
 
-Comments of the form `// --8<-- [start:name]` mark the excerpts the [Game Developer's Handbook](https://datazuul.github.io/amade-game-engine/) quotes.
+Comments of the form `// --8<-- [start:name]` mark the excerpts the [Game Developer's Handbook](https://docs.amadeos.eu/amade-game-engine/) quotes.
 
 ## Licence
 

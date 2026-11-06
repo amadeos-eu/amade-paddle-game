@@ -5,6 +5,8 @@
 ![License](https://img.shields.io/badge/license-EUPL--1.2-blue)
 ![Java](https://img.shields.io/badge/Java-25-orange)
 
+![Paddle](docs/screenshots/amade-paddle-game.png)
+
 ## Playing
 
 - **One player** (1, Enter or F2): you play the **right** paddle with the **arrow keys**, the computer the left one. Three difficulties: *Easy*, *Normal*, *Hard*.
